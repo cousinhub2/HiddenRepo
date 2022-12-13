@@ -1,0 +1,499 @@
+{
+	"info": {
+		"_postman_id": "b746541f-20e8-43fd-982b-92c482bc4283",
+		"name": "Github API V2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15282555"
+	},
+	"item": [
+		{
+			"name": "ManageRepositories",
+			"item": [
+				{
+					"name": "List Repositories for an existing user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Le status HTTP est OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"La recherche descendente des repositories\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0].name).to.eql(\"Web-driver-selenium-python\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"public, max-age=60, s-maxage=60\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/vnd.github+json",
+								"type": "text"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "public, max-age=60, s-maxage=60",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/users/:username/repos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								":username",
+								"repos"
+							],
+							"query": [
+								{
+									"key": "direction",
+									"value": "desc",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "StanDimitrov"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List private Repositories for existing user",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/vnd.github+json",
+								"type": "text"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "public, max-age=60, s-maxage=60",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/users/brytich/repos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"brytich",
+								"repos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List repositories for the authenticated user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "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",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/user/repos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user",
+								"repos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create an existing repositorie for the authenticated user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"La creation d'une repositorie qui existe deja ne s'effectue pas\", function () {\r",
+									"\r",
+									"\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.errors[0].message).to.eql(\"name already exists on this account\");\r",
+									"\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "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",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"a\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/user/repos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user",
+								"repos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a new repositorie for the authenticated user",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"var randomRepo = \"AJC\" + pm.variables.replaceIn('{{$randomInt}}')\r",
+									"\r",
+									"pm.collectionVariables.set(\"RepoName\", randomRepo );\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Le text existe dans le body\", function () {\r",
+									"\r",
+									"  var textData = pm.response.text();\r",
+									"\r",
+									"    pm.expect(textData).to.include(\"node_id\");\r",
+									"\r",
+									"\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"La creation de la repository est effectuée \", function () {\r",
+									"\r",
+									"    var jsonData = pm.response.json();\r",
+									"\r",
+									"    var getRepo = pm.variables.get(\"RepoName\")\r",
+									"\r",
+									"     console.log(getRepo);\r",
+									"\r",
+									"    pm.expect(jsonData.name).to.eql(getRepo);\r",
+									"\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"/*\r",
+									"\r",
+									"Ce code est pour recuperer le nom de la repository a partir de la reponse body \r",
+									"= ce n'est pas pour faire un test mais c'est pour la recueperer au niveau de la requete suivante ( par exemple la req patch pour modifier la repo)\r",
+									"\r",
+									"1.Faire le parse pour inspecter le resultat JSON\r",
+									"2. Parametrer la variable \"RepoName\" par la valeur jsondata.name\r",
+									"\r",
+									"*/\r",
+									" \r",
+									"\r",
+									" var jsondata = JSON.parse(responseBody);\r",
+									"\r",
+									" console.log(jsondata);\r",
+									"\r",
+									"\r",
+									"pm.environment.set(\"RepoName\", jsondata.name);\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "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",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{RepoName}}\",\r\n    \"private\" : true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/user/repos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user",
+								"repos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update RepositoryName",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Le changement de la privacy est effectué\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.private).to.eql(false);\r",
+									"});\r",
+									"\r",
+									" var jsondata = JSON.parse(responseBody);\r",
+									"\r",
+									" console.log(jsondata);\r",
+									"\r",
+									"\r",
+									"pm.environment.set(\"NewRepoName\", jsondata.name);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"var randomRepo = \"AJCnew\" + pm.variables.replaceIn('{{$randomInt}}')\r",
+									"\r",
+									"pm.collectionVariables.set(\"NewRepoName\", randomRepo );"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "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",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n    \"name\": \"{{NewRepoName}}\",\r\n    \"private\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/repos/:owner/:repo",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"repos",
+								":owner",
+								":repo"
+							],
+							"variable": [
+								{
+									"key": "owner",
+									"value": "apiTestUserr"
+								},
+								{
+									"key": "repo",
+									"value": "{{RepoName}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update RepositoryName Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Your test name\", function () {\r",
+									"    var txt = pm.response.text();\r",
+									"    pm.expect(txt).not.to.include(\"NewRepoName\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.get(\"NewRepoNamebb\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "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",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/user/repos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user",
+								"repos"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "RepoName",
+			"value": ""
+		},
+		{
+			"key": "NewRepoName",
+			"value": ""
+		}
+	]
+}

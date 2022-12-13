@@ -1,0 +1,498 @@
+{
+	"info": {
+		"_postman_id": "02e32587-2cd7-4c44-85bf-0d9a81f78f15",
+		"name": "git",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24838283"
+	},
+	"item": [
+		{
+			"name": "Post repo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonData = pm.response.json();",
+							"pm.test(\"Test data type of the response\", function() {",
+							"  pm.expect(jsonData.errors[0].message).is.string(\"name already exists on this account\");",
+							"});",
+							"var jsonDataAll = JSON.parse(responseBody);",
+							"console.log(jsonDataAll);",
+							"pm.environment.set(\"RepoName\",jsonDataAll.name);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "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",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Hello-World\",\n    \"description\": \"This is your first repo!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/user/repos",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"user",
+						"repos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post repo Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonData = pm.response.json();",
+							"pm.test(\"Test data type of the response\", function() {",
+							"  pm.expect(jsonData.errors[0].message).is.string(\"name already exists on this account\");",
+							"});",
+							"",
+							"pm.test(\"Test existence\", function() {",
+							"  pm.expect(jsonData.id).is.not.null;",
+							"});",
+							"",
+							"var jsonDataAll = JSON.parse(responseBody);",
+							"console.log(jsonDataAll);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "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",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"2d Post\",\n    \"description\": \"This is your 2d repo!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/user/repos",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"user",
+						"repos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post repo Copy 2",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"",
+							"",
+							"",
+							"var repositoryName = \"AJC-\" + pm.variables.replaceIn('{{$randomInt}}');",
+							"var repositoryDesc =\"Description-\" + pm.variables.replaceIn('{{$randomCompanyName}}')",
+							"pm.collectionVariables.set(\"RepoName\",repositoryName)",
+							"pm.collectionVariables.set(\"RepoDesc\",repositoryDesc);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonData = pm.response.json();",
+							"pm.test(\"Test data type of the response\", function() {",
+							"  pm.expect(jsonData.errors[0].message).is.string(\"name already exists on this account\");",
+							"});",
+							"",
+							"pm.test(\"Test data type of the response\", function() {",
+							"  pm.expect(jsonData.id).is.not.null;",
+							"});",
+							"",
+							"pm.test(\"http response ok\",function(){",
+							"    pm.expect(pm.response.code).to.be.oneOf([201,292]);",
+							"});",
+							"",
+							"pm.test(\"creation repo desc ok\",function(){",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.description).to.eql(pm.collectionVariables.get(\"RepoDesc\"));",
+							"});",
+							"",
+							"pm.test(\"creation repo name ok\",function(){",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.name).to.eql(pm.collectionVariables.get(\"RepoName\").replaceAll(\" \",\"-\"));",
+							"});",
+							"",
+							"pm.test(\"le texte existe\",function(){",
+							"    pm.expect(pm.response.text()).to.include(\"issues_url\");",
+							"});",
+							"/*",
+							"ce code suivant sert à recuperer le nom de la repo afin de pouvoir la recuperer et la modifier dans la requete suivante ",
+							"*/",
+							"var jsonDataALL = JSON.parse(responseBody);",
+							"console.log(jsonDataALL);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "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",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{RepoName}}\",\n    \"description\":\"{{RepoDesc}}\"\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/user/repos",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"user",
+						"repos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Open repo for auth users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status test\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"let jsonData = pm.response.json();",
+							"pm.test(\"Test data type of the response\", function() {",
+							"  pm.expect(jsonData[0].name).is.string(\"Hello-World\");",
+							"});",
+							"",
+							"pm.test(\"Test login\", () => {",
+							"  pm.expect(jsonData[0].owner.login).is.string(\"cousinhub2\");",
+							"});",
+							"",
+							"pm.test(\"Your id\", function () {",
+							"",
+							"    pm.expect(jsonData[0].id).to.eql(577264204);",
+							"});",
+							"",
+							"pm.test(\"Test name repo\", function() {",
+							"  pm.expect(jsonData[1].name).is.string(\"HiddenRepo\");",
+							"});",
+							"",
+							"pm.test(\"Test data type name repo\", function() {",
+							"  pm.expect(jsonData[0].name).to.be.an(\"string\");",
+							"});",
+							"pm.test(\"Test data type body\", function() {",
+							"  pm.expect(jsonData).to.be.an(\"array\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/users/:username/repos",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":username",
+						"repos"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "RepoPostman",
+							"disabled": true
+						},
+						{
+							"key": "private",
+							"value": "false",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "username",
+							"value": "cousinhub2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update repo name",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"modif repo ok\",function(){",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.private).to.eql(true);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "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",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"private\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/repos/:owner/:repo",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"repos",
+						":owner",
+						":repo"
+					],
+					"variable": [
+						{
+							"key": "owner",
+							"value": "cousinhub2"
+						},
+						{
+							"key": "repo",
+							"value": "{{RepoName}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete repo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"",
+							"pm.collectionVariables.get(\"variable_key\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "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",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/repos/:owner/:repo",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"repos",
+						":owner",
+						":repo"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "owner",
+							"value": "cousinhub2"
+						},
+						{
+							"key": "repo",
+							"value": "{{RepoName}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List after delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200); ",
+							"});",
+							"",
+							"",
+							"pm.test(\"Your test name\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.name).to.not.eql(\"AJC\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "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",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/users/:username/repos",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":username",
+						"repos"
+					],
+					"variable": [
+						{
+							"key": "username",
+							"value": "cousinhub2"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "RepoName",
+			"value": ""
+		},
+		{
+			"key": "RepoDesc",
+			"value": ""
+		}
+	]
+}
